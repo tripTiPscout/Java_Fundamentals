@@ -1,0 +1,119 @@
+package Fundamentals;
+
+import java.util.Scanner;
+
+public class GamingStore {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        double currentBalance = Double.parseDouble(scanner.nextLine());
+
+        String command = scanner.nextLine();
+        double currentPrice = 0;
+        double totalSpent = 0;
+        boolean outOfMoney = false;
+
+        while (!command.equals("Game Time")) {
+            String game = command;
+            if (command.equals("OutFall 4")) {
+                currentPrice = 39.99;
+                if (currentBalance <= currentPrice) {
+                    System.out.println("Too Expensive");
+                    command = scanner.nextLine();
+                    continue;
+                }
+                System.out.printf("Bought %s\n", game);
+                currentBalance -= 39.99;
+                totalSpent += 39.99;
+                if (currentBalance <= 0) {
+                    System.out.println("Out of money!");
+                    outOfMoney = true;
+                    break;
+                }
+            } else if (command.equals("CS: OG")) {
+                currentPrice = 15.99;
+                if (currentBalance <= currentPrice) {
+                    System.out.println("Too Expensive");
+                    command = scanner.nextLine();
+                    continue;
+                }
+                System.out.printf("Bought %s\n", game);
+                currentBalance -= 15.99;
+                totalSpent += 15.99;
+                if (currentBalance <= 0) {
+                    System.out.println("Out of money!");
+                    outOfMoney = true;
+                    break;
+                }
+            } else if (command.equals("Zplinter Zell")) {
+                currentPrice = 19.99;
+                if (currentBalance < currentPrice) {
+                    System.out.println("Too Expensive");
+                    command = scanner.nextLine();
+                    continue;
+                }
+                System.out.printf("Bought %s\n", game);
+                currentBalance -= 19.99;
+                totalSpent += 19.99;
+                if (currentBalance <= 0) {
+                    System.out.println("Out of money!");
+                    outOfMoney = true;
+                    break;
+                }
+            } else if (command.equals("Honored 2")) {
+                currentPrice = 59.99;
+                if (currentBalance <= currentPrice) {
+                    System.out.println("Too Expensive");
+                    command = scanner.nextLine();
+                    continue;
+                }
+                System.out.printf("Bought %s\n", game);
+                currentBalance -= 59.99;
+                totalSpent += 59.99;
+                if (currentBalance <= 0) {
+                    System.out.println("Out of money!");
+                    outOfMoney = true;
+                    break;
+                }
+            } else if (command.equals("RoverWatch")) {
+                currentPrice = 29.99;
+                if (currentBalance <= currentPrice) {
+                    System.out.println("Too Expensive");
+                    command = scanner.nextLine();
+                    continue;
+                }
+                System.out.printf("Bought %s\n", game);
+                currentBalance -= 29.99;
+                totalSpent += 29.99;
+                if (currentBalance <= 0) {
+                    System.out.println("Out of money!");
+                    outOfMoney = true;
+                    break;
+                }
+            } else if (command.equals("RoverWatch Origins Edition")) {
+                currentPrice = 39.99;
+                if (currentBalance <= currentPrice) {
+                    System.out.println("Too Expensive");
+                    command = scanner.nextLine();
+                    continue;
+                }
+                System.out.printf("Bought %s\n", game);
+                currentBalance -= 39.99;
+                totalSpent += 39.99;
+                if (currentBalance <= 0) {
+                    System.out.println("Out of money!");
+                    outOfMoney = true;
+                    break;
+                }
+            } else {
+                System.out.println("Not Found");
+            }
+            command = scanner.nextLine();
+        }
+
+        if (!outOfMoney) {
+            System.out.printf("Total spent: $%.2f. Remaining: $%.2f",totalSpent,currentBalance);
+        }
+
+    }
+}
