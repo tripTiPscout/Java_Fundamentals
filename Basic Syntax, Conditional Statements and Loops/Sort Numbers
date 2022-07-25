@@ -1,0 +1,32 @@
+package Fundamentals;
+
+import java.util.Scanner;
+
+public class SortNumbers {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int maxNum = Integer.MIN_VALUE;
+        int midNum = Integer.MIN_VALUE;
+        int minNum = Integer.MIN_VALUE;
+
+        for (int i = 1; i <= 3; i++) {
+            int num = Integer.parseInt(scanner.nextLine());
+            if (num > maxNum) {
+                minNum = midNum;
+                midNum = maxNum;
+                maxNum = num;
+            } else if (num > midNum) {
+                minNum = midNum;
+                midNum = num;
+            } else if (num > minNum) {
+                minNum = num;
+            }
+        }
+
+        System.out.println(maxNum);
+        System.out.println(midNum);
+        System.out.println(minNum);
+
+    }
+}
