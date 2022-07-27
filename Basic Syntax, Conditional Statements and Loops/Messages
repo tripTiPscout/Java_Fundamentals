@@ -1,0 +1,32 @@
+package Fundamentals;
+
+import java.util.Scanner;
+
+public class Messages {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int lettersCount = Integer.parseInt(scanner.nextLine());
+
+        for (int i = 1; i <= lettersCount; i++) {
+            int digit = Integer.parseInt(scanner.nextLine());
+            
+            String textDigit = digit + "";
+            int digitLength = textDigit.length();
+            int mainDigit = textDigit.charAt(0) - 48;
+            int offset = 0;
+            
+            if (mainDigit == 8 || mainDigit == 9) {
+                offset = ((mainDigit - 2) * 3) + 1;
+            } else if (mainDigit == 0) {
+                offset = -65;
+            } else {
+                offset = (mainDigit - 2) * 3;
+            }
+            
+            int letterIndex = (offset + digitLength - 1);
+            System.out.printf("%c", letterIndex + 97);
+        }
+
+    }
+}
