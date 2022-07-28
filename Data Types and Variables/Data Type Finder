@@ -1,0 +1,49 @@
+package Fundamentals;
+
+import java.util.Scanner;
+
+public class DataTypeFinder {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+
+        while (!input.equals("END")) {
+            String type = "";
+            if (input.equalsIgnoreCase("true") || input.equalsIgnoreCase("false")) {
+                type = "boolean";
+            } else if (input.length() == 1) {
+                if (input.charAt(0) < 47 || input.charAt(0) > 58) {
+                    type = "character";
+                } else {
+                    type = "integer";
+                }
+            } else {
+                boolean isSting = false;
+                boolean isFloat = false;
+                for (int i = 0; i < input.length(); i++) {
+                    char currentSymbol = input.charAt(i);
+                    if (currentSymbol < 45 || currentSymbol > 57) {
+                        isSting = true;
+                        break;
+                    }
+                    if (currentSymbol == 46) {
+                        isFloat = true;
+                    }
+                }
+                if (isSting) {
+                    type = "string";
+                } else {
+                    if (isFloat) {
+                        type = "floating point";
+                    } else {
+                        type = "integer";
+                    }
+                }
+            }
+            System.out.printf("%s is %s type\n", input, type);
+            input = scanner.nextLine();
+        }
+
+    }
+}
