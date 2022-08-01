@@ -1,0 +1,42 @@
+package Fundamentals;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class BalancedBrackets {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        byte lines = Byte.parseByte(scanner.nextLine());
+
+        boolean balanced = false;
+        String openBracket = "";
+
+        for (int i = 1; i <= lines; i++) {
+            String symbol = scanner.nextLine();
+            if (openBracket.equals("") && symbol.equals(")")) {
+                balanced = false;
+                break;
+            }
+            if (openBracket.equals("(") && symbol.equals("(")) {
+                balanced = false;
+                break;
+            }
+            if (openBracket.equals("(") && symbol.equals(")")) {
+                balanced = true;
+                openBracket = "";
+            }
+            if (symbol.equals("(")) {
+                openBracket = "(";
+                balanced = false;
+            }
+        }
+
+        if (balanced) {
+            System.out.println("BALANCED");
+        } else {
+            System.out.println("UNBALANCED");
+        }
+
+    }
+}
