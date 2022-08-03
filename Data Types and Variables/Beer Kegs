@@ -1,0 +1,32 @@
+package Advanced;
+
+import java.util.*;
+
+public class BeerKegs {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int kegs = Integer.parseInt(scanner.nextLine());
+        
+        double maxVolume = 0;
+        String biggestKegModel = "";
+        
+        for (int i = 1; i <= kegs; i++) {
+            String currentKegModel = scanner.nextLine();
+            double currentKegRadius = Double.parseDouble(scanner.nextLine());
+            int currentKegHeight = Integer.parseInt(scanner.nextLine());
+            
+            double volume = Math.PI * Math.pow(currentKegRadius, 2) * currentKegHeight;
+
+            if (volume > maxVolume) {
+                maxVolume = volume;
+                biggestKegModel = currentKegModel;
+            }
+        }
+        
+        System.out.println(biggestKegModel);
+        
+    }
+
+}
