@@ -1,0 +1,55 @@
+package Fundamentals;
+
+import java.util.*;
+
+public class Ladybugs {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int fieldSize = Integer.parseInt(scanner.nextLine());
+        int[] usedFields = Arrays.stream(scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        String command = scanner.nextLine();
+
+        int[] freeFields = new int[fieldSize];
+
+        for (int ladyBugIndex : usedFields) {
+            if (ladyBugIndex >= 0 && ladyBugIndex <= freeFields.length - 1) {
+                freeFields[ladyBugIndex] = 1;
+            }
+        }
+
+        while (!command.equals("end")) {
+            String[] directionCommand = command.split(" ");
+            int fromPosition = Integer.parseInt(directionCommand[0]);
+            String direction = directionCommand[1];
+            int fieldsMove = Integer.parseInt(directionCommand[2]);
+            if (fromPosition >= 0 && fromPosition <= freeFields.length - 1 && freeFields[fromPosition] == 1) {
+                freeFields[fromPosition] = 0;
+                if (direction.equals("right")) {
+                    fromPosition += fieldsMove;
+                    while (fromPosition <= freeFields.length - 1 && freeFields[fromPosition] == 1) {
+                        fromPosition += fieldsMove;
+                    }
+                    if (fromPosition <= freeFields.length - 1) {
+                        freeFields[fromPosition] = 1;
+                    }
+                } else if (direction.equals("left")) {
+                    fromPosition -= fieldsMove;
+                    while (fromPosition >= 0 && freeFields[fromPosition] == 1) {
+                        fromPosition -= fieldsMove;
+                    }
+                    if (fromPosition >= 0) {
+                        freeFields[fromPosition] = 1;
+                    }
+                }
+            }
+            command = scanner.nextLine();
+        }
+
+        for (int num : freeFields) {
+            System.out.print(num + " ");
+        }
+
+    }
+}
