@@ -1,0 +1,42 @@
+package Fundamentals;
+
+import java.util.Scanner;
+
+public class TopNumber {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int num = Integer.parseInt(scanner.nextLine());
+
+        for (int index = 1; index <= num; index++) {
+            boolean isDivisible = checkIsDivisible(index);
+            boolean holdOddDigit = checkHoldOddDigit(index);
+            if (isDivisible && holdOddDigit) {
+                System.out.println(index);
+            }
+        }
+    }
+
+    private static boolean checkIsDivisible(int index) {
+        int sum = 0;
+        while (index != 0) {
+            int currentDigit = index % 10;
+            sum += currentDigit;
+            index = index / 10;
+        }
+        return sum % 8 == 0;
+    }
+
+    private static boolean checkHoldOddDigit(int index) {
+        while (index != 0) {
+            int currentDigit = index % 10;
+            if (currentDigit % 2 != 0) {
+                return true;
+            }
+            index = index / 10;
+        }
+        return false;
+    }
+
+}
