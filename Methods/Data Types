@@ -1,0 +1,41 @@
+package Fundamentals;
+
+import java.util.Scanner;
+
+public class DataTypes {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String type = scanner.nextLine();
+        String input = scanner.nextLine();
+
+        switch (type) {
+            case "int":
+                int num = Integer.parseInt(input);
+                printResult(num);
+                break;
+            case "real":
+                double number = Double.parseDouble(input);
+                printResult(number);
+                break;
+            case "string":
+                printResult(input);
+                break;
+        }
+    }
+
+    private static void printResult(int num) {
+        System.out.println(num * 2);
+    }
+
+    private static void printResult(double number) {
+        number *= 1.5;
+        System.out.printf("%.2f",number);
+    }
+
+    private static void printResult(String text) {
+        System.out.printf("$%s$",text);
+    }
+    
+}
