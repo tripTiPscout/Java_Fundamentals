@@ -1,0 +1,74 @@
+package Fundamentals;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class SoftUniCoursePlanning {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        List<String> schedule = Arrays.stream(scanner.nextLine().split(", ")).collect(Collectors.toList());
+
+        String startCommand = scanner.nextLine();
+
+        while (!startCommand.equals("course start")) {
+            String[] commands = startCommand.split(":");
+            String lesson = commands[1];
+            switch (commands[0]) {
+                case "Add":
+                    if (!schedule.contains(lesson)) {
+                        schedule.add(lesson);
+                    }
+                    break;
+                case "Insert":
+                    int indexToInsert = Integer.parseInt(commands[2]);
+                    if (!schedule.contains(lesson)) {
+                        schedule.add(indexToInsert, lesson);
+                    }
+                    break;
+                case "Remove":
+                    schedule.remove(lesson);
+                    schedule.remove(lesson + "-Exercise");
+                    break;
+                case "Swap":
+                    String lessonOne = commands[1];
+                    String lessonTwo = commands[2];
+                    String lessonOneEx = lessonOne + "-Exercise";
+                    String lessonTwoEx = lessonTwo + "-Exercise";
+                    if (schedule.contains(lessonOne) && schedule.contains(lessonTwo)) {
+                        int indexLessonTwo = schedule.indexOf(lessonTwo);
+                        schedule.set(schedule.indexOf(lessonOne), lessonTwo);
+                        schedule.set(indexLessonTwo, lessonOne);
+                        if (schedule.contains(lessonOneEx)) {
+                            schedule.remove(lessonOneEx);
+                            schedule.add(schedule.indexOf(lessonOne) + 1, lessonOneEx);
+                        }
+                        if (schedule.contains(lessonTwoEx)) {
+                            schedule.remove(lessonTwoEx);
+                            schedule.add(schedule.indexOf(lessonTwo) + 1, lessonTwoEx);
+                        }
+                    }
+                    break;
+                case "Exercise":
+                    String lessonEx = lesson + "-Exercise";
+                    if (schedule.contains(lesson) && schedule.contains(lessonEx)) {
+                        break;
+                    } else if (schedule.contains(lesson)) {
+                        schedule.add(schedule.indexOf(lesson) + 1, lessonEx);
+                    } else {
+                        schedule.add(lesson);
+                        schedule.add(lessonEx);
+                    }
+                    break;
+            }
+            startCommand = scanner.nextLine();
+        }
+
+        for (int i = 0; i < schedule.size(); i++) {
+            System.out.printf("%d.%s\n", i + 1, schedule.get(i));
+        }
+
+    }
+
+}
