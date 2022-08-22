@@ -1,0 +1,52 @@
+package Fundamentals;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class PokemonDontGo {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        List<Integer> distances = Arrays.stream(scanner.nextLine().split("\\s+")).map(Integer::parseInt).collect(Collectors.toList());
+
+        int sumOfRemovedEl = 0;
+        int currentIndexValue;
+
+        while (!distances.isEmpty()) {
+            int index = Integer.parseInt(scanner.nextLine());
+            if (index < 0) {
+                currentIndexValue = distances.get(0);
+                sumOfRemovedEl += distances.get(0);
+                distances.remove(0);
+                distances.add(0, distances.get(distances.size() - 1));
+                setIncreaseDecrease(distances, currentIndexValue);
+            } else if (index > distances.size() - 1) {
+                currentIndexValue = distances.get(distances.size() - 1);
+                sumOfRemovedEl += distances.get(distances.size() - 1);
+                distances.remove(distances.size() - 1);
+                distances.add(distances.get(0));
+                setIncreaseDecrease(distances, currentIndexValue);
+            } else {
+                currentIndexValue = distances.get(index);
+                sumOfRemovedEl += distances.get(index);
+                distances.remove(index);
+                setIncreaseDecrease(distances, currentIndexValue);
+            }
+        }
+
+        System.out.println(sumOfRemovedEl);
+    }
+
+    private static void setIncreaseDecrease(List<Integer> distances, int currentIndexValue) {
+        for (int i = 0; i < distances.size(); i++) {
+            int restIndexesValue = distances.get(i);
+            if (restIndexesValue <= currentIndexValue) {
+                distances.set(i, restIndexesValue + currentIndexValue);
+            } else {
+                distances.set(i, restIndexesValue - currentIndexValue);
+            }
+        }
+    }
+
+}
