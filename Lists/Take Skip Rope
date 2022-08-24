@@ -1,0 +1,61 @@
+package Fundamentals;
+
+import java.util.*;
+
+public class TakeSkipRope {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+
+        List<Integer> numbers = new ArrayList<>();
+
+        for (int i = 0; i < input.length(); i++) {
+            char currentSymbol = input.charAt(i);
+            if (currentSymbol >= 48 && currentSymbol <= 57) {
+                numbers.add(Integer.parseInt(String.valueOf(currentSymbol)));
+                input = input.substring(0, i) + input.substring(i + 1);
+                i--;
+            }
+        }
+
+        List<Integer> takeList = new ArrayList<>();
+        List<Integer> skipList = new ArrayList<>();
+
+        for (int i = 0; i < numbers.size(); i++) {
+            if (i == 0) {
+                takeList.add(numbers.get(i));
+            } else if (i % 2 != 0) {
+                skipList.add(numbers.get(i));
+            } else {
+                takeList.add(numbers.get(i));
+            }
+        }
+
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < takeList.size(); i++) {
+            int takeCount = takeList.get(i);
+            int skipCount = skipList.get(i);
+            
+            if (takeCount > input.length()) {
+                takeCount = input.length();
+            }
+            if (skipCount > input.length()) {
+                skipCount = input.length();
+            }
+            result.append(input.substring(0, takeCount));
+            input = input.substring(takeCount);
+            
+            if (input.length() == 0) {
+                break;
+            } else {
+                input = input.substring(skipCount);
+            }
+        }
+
+        System.out.println(result);
+    }
+
+}
