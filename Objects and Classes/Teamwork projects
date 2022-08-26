@@ -1,0 +1,142 @@
+package Fundamentals;
+
+import java.util.*;
+
+public class TeamworkProjects {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int teamCount = Integer.parseInt(scanner.nextLine());
+
+        List<Team> teams = new ArrayList<>();
+
+        for (int i = 1; i <= teamCount; i++) {
+            String[] inputCreatorTeam = scanner.nextLine().split("-");
+
+            String creator = inputCreatorTeam[0];
+            String team = inputCreatorTeam[1];
+
+            Team newTeam = new Team(team, creator);
+
+            if (isTeamDoNotExist(teams, team)  && (!isMemberExist(teams, creator))) {
+                teams.add(newTeam);
+                System.out.printf("Team %s has been created by %s!\n", team, creator);
+            } else {
+                if (!isTeamDoNotExist(teams, team)) {
+                    System.out.printf("Team %s was already created!\n", team);
+                } else if (isMemberExist(teams, creator)) {
+                    System.out.printf("%s cannot create another team!\n", creator);
+                }
+            }
+        }
+
+        String inputCommand = scanner.nextLine();
+
+        while (!inputCommand.equals("end of assignment")) {
+            String[] inputUserTeam = inputCommand.split("->");
+
+            String userToJoin = inputUserTeam[0];
+            String teamToJoin = inputUserTeam[1];
+
+            if (isTeamDoNotExist(teams, teamToJoin)) {
+                System.out.printf("Team %s does not exist!\n", teamToJoin);
+            } else {
+                if (isMemberExist(teams, userToJoin)) {
+                    System.out.printf("Member %s cannot join team %s!\n", userToJoin, teamToJoin);
+                } else {
+                    for (Team team : teams) {
+                        if (team.getName().equals(teamToJoin)) {
+                            team.addMember(userToJoin);
+                        }
+                    }
+                }
+            }
+
+            inputCommand = scanner.nextLine();
+        }
+
+        teams.sort(Comparator.comparing(Team::getName));
+        teams.sort(Comparator.comparing(Team::membersCount).reversed());
+
+        printTeams(teams);
+
+        printDisbandedTeams(teams);
+    }
+
+    private static void printDisbandedTeams(List<Team> teams) {
+        System.out.println("Teams to disband:");
+        for (Team team : teams) {
+            if (team.getMembers().isEmpty()) {
+                System.out.println(team.getName());
+            }
+        }
+    }
+
+    private static void printTeams(List<Team> teams) {
+        for (Team currentTeam : teams) {
+            if (!currentTeam.getMembers().isEmpty()) {
+                System.out.println(currentTeam.getName());
+                System.out.printf("- %s\n", currentTeam.getCreator());
+                for (String member : currentTeam.getMembers()) {
+                    System.out.printf("-- %s\n", member);
+                }
+            }
+        }
+    }
+
+    private static boolean isMemberExist(List<Team> teams, String user) {
+        for (Team currentTeam : teams) {
+            if (currentTeam.getMembers().contains(user) || (currentTeam.getCreator().equals(user))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isTeamDoNotExist(List<Team> teams, String teamName) {
+        for (Team currentTeam : teams) {
+            if (currentTeam.getName().equals(teamName)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static class Team {
+
+        private String name;
+        private String creator;
+        private List<String> members = new ArrayList<>();
+
+        List<String> unmodifiableList = Collections.unmodifiableList(members);
+
+        public Team(String name, String creator) {
+            this.name = name;
+            this.creator = creator;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getCreator() {
+            return creator;
+        }
+
+        public List<String> getMembers() {
+            members.sort(String::compareTo);
+            return unmodifiableList;
+        }
+
+        public int membersCount() {
+            return members.size();
+        }
+
+        public void addMember(String memberName) {
+            members.add(memberName);
+        }
+
+    }
+
+}
