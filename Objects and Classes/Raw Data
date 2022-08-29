@@ -1,0 +1,168 @@
+package Fundamentals;
+
+import java.util.*;
+
+public class RawData {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int carsInput = Integer.parseInt(scanner.nextLine());
+
+        List<Car> cars = new ArrayList<>();
+
+        for (int i = 1; i <= carsInput; i++) {
+            String[] inputCarData = scanner.nextLine().split(" ");
+
+            String model = inputCarData[0];
+            
+            int engineSpeed = Integer.parseInt(inputCarData[1]);
+            int enginePower = Integer.parseInt(inputCarData[2]);
+            
+            int cargoWeight = Integer.parseInt(inputCarData[3]);
+            String cargoType = inputCarData[4];
+            
+            double tire1Pressure = Double.parseDouble(inputCarData[5]);
+            int tire1Age = Integer.parseInt(inputCarData[6]);
+            
+            double tire2Pressure = Double.parseDouble(inputCarData[7]);
+            int tire2Age = Integer.parseInt(inputCarData[8]);
+            
+            double tire3Pressure = Double.parseDouble(inputCarData[9]);
+            int tire3Age = Integer.parseInt(inputCarData[10]);
+            
+            double tire4Pressure = Double.parseDouble(inputCarData[11]);
+            int tire4Age = Integer.parseInt(inputCarData[12]);
+
+            Engine engine = new Engine(engineSpeed, enginePower);
+            Cargo cargo = new Cargo(cargoWeight, cargoType);
+            Tire tires = new Tire(tire1Pressure, tire1Age, tire2Pressure, tire2Age, tire3Pressure, tire3Age, tire4Pressure, tire4Age);
+            
+            Car newCar = new Car(model, engine, cargo, tires);
+            cars.add(newCar);
+        }
+
+        String commandCargoType = scanner.nextLine();
+
+        if (commandCargoType.equals("fragile")) {
+            for (Car car : cars) {
+                if (car.getCargo().getType().equals("fragile") && (car.getTire().getTire1Pressure() < 1 || car.getTire().getTire2Pressure() < 1 || car.getTire().getTire3Pressure() < 1 || car.getTire().getTire4Pressure() < 1)) {
+                    System.out.println(car);
+                }
+            }
+        } else if (commandCargoType.equals("flamable")) {
+            for (Car car : cars) {
+                if (car.getCargo().getType().equals("flamable") && car.getEngine().getPower() > 250) {
+                    System.out.println(car);
+                }
+            }
+        }
+    }
+
+    static class Car {
+
+        private String model;
+        private Engine engine;
+        private Cargo cargo;
+        private Tire tire;
+
+        public Car(String model, Engine engine, Cargo cargo, Tire tire) {
+            this.model = model;
+            this.engine = engine;
+            this.cargo = cargo;
+            this.tire = tire;
+        }
+
+        public Engine getEngine() {
+            return engine;
+        }
+
+        public Cargo getCargo() {
+            return cargo;
+        }
+
+        public Tire getTire() {
+            return tire;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s", model);
+        }
+    }
+
+    static class Engine {
+
+        private int speed;
+        private int power;
+
+        public Engine(int speed, int power) {
+            this.speed = speed;
+            this.power = power;
+        }
+
+        public int getPower() {
+            return power;
+        }
+    }
+
+    static class Cargo {
+
+        private int weight;
+        private String type;
+
+        public Cargo(int weight, String type) {
+            this.weight = weight;
+            this.type = type;
+        }
+
+        public String getType() {
+            return type;
+        }
+    }
+
+    static class Tire {
+
+        private double tire1Pressure;
+        private int tire1Age;
+        
+        private double tire2Pressure;
+        private int tire2Age;
+        
+        private double tire3Pressure;
+        private int tire3Age;
+        
+        private double tire4Pressure;
+        private int tire4Age;
+
+        public Tire(double tire1Pressure, int tire1Age, double tire2Pressure, int tire2Age, double tire3Pressure, int tire3Age, double tire4Pressure, int tire4Age) {
+            this.tire1Pressure = tire1Pressure;
+            this.tire1Age = tire1Age;
+            
+            this.tire2Pressure = tire2Pressure;
+            this.tire2Age = tire2Age;
+            
+            this.tire3Pressure = tire3Pressure;
+            this.tire3Age = tire3Age;
+            
+            this.tire4Pressure = tire4Pressure;
+            this.tire4Age = tire4Age;
+        }
+
+        public double getTire1Pressure() {
+            return tire1Pressure;
+        }
+
+        public double getTire2Pressure() {
+            return tire2Pressure;
+        }
+
+        public double getTire3Pressure() {
+            return tire3Pressure;
+        }
+
+        public double getTire4Pressure() {
+            return tire4Pressure;
+        }
+    }
+}
