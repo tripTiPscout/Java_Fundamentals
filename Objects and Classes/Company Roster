@@ -1,0 +1,131 @@
+package Fundamentals;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class CompanyRoster {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int lines = Integer.parseInt(scanner.nextLine());
+
+        List<Employee> employees = new ArrayList<>();
+
+        fillEmployeeList(scanner, lines, employees);
+
+        List<String> departmentsList = employees.stream().map(Employee::getDepartment).distinct().collect(Collectors.toList());
+
+        List<Department> departments = new ArrayList<>();
+
+        for (String department : departmentsList) {
+            departments.add(new Department(department, employees.stream().filter(employee -> employee.getDepartment().equals(department)).collect(Collectors.toList())));
+        }
+
+        departments.sort(Comparator.comparingDouble(Department::getAverageSalary).reversed());
+        Department department = departments.get(0);
+        department.getEmployee().sort(Comparator.comparingDouble(Employee::getSalary).reversed());
+
+        System.out.printf("Highest Average Salary: %s%n", department.getName());
+        for (Employee employee : department.getEmployee()) {
+            System.out.print(employee);
+        }
+
+    }
+
+    private static void fillEmployeeList(Scanner scanner, int lines, List<Employee> employees) {
+        for (int i = 1; i <= lines; i++) {
+            String[] inputData = scanner.nextLine().split(" ");
+
+            String employeeName = inputData[0];
+            double employeeSalary = Double.parseDouble(inputData[1]);
+            String employeePosition = inputData[2];
+            String departmentName = inputData[3];
+            String employeeMail = "n/a";
+            int employeeAge = -1;
+
+            if (inputData.length == 5) {
+                if (isAge(inputData[4])) {
+                    employeeAge = Integer.parseInt(inputData[4]);
+                } else {
+                    employeeMail = inputData[4];
+                }
+            } else if (inputData.length == 6) {
+                employeeMail = inputData[4];
+                employeeAge = Integer.parseInt(inputData[5]);
+            }
+
+            Employee newEmployee = new Employee(employeeName, employeeSalary, employeePosition, departmentName, employeeMail, employeeAge);
+            employees.add(newEmployee);
+        }
+    }
+
+    public static boolean isAge(String input) {
+        try {
+            Integer.parseInt(input);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+    
+    static class Employee {
+
+        private String name;
+        private double salary;
+        private String position;
+        private String department;
+        private String mail;
+        private int age;
+
+        public Employee(String name, double salary, String position, String department, String mail, int age) {
+            this.name = name;
+            this.salary = salary;
+            this.position = position;
+            this.department = department;
+            this.mail = mail;
+            this.age = age;
+        }
+
+        public double getSalary() {
+            return salary;
+        }
+
+        public String getDepartment() {
+            return department;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s %.2f %s %d\n", name, salary, mail, age);
+        }
+
+    }
+
+    static class Department {
+
+        private String name;
+        private List<Employee> employee;
+        private double averageSalary;
+
+        public Department(String name, List<Employee> employee) {
+            this.name = name;
+            this.employee = employee;
+            this.averageSalary = employee.stream().mapToDouble(Employee::getSalary).average().getAsDouble();
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public List<Employee> getEmployee() {
+            return employee;
+        }
+
+        public double getAverageSalary() {
+            return averageSalary;
+        }
+
+    }
+
+}
