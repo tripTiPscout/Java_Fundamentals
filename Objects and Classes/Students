@@ -14,7 +14,7 @@ public class Students {
         List<Student> students = new ArrayList<>();
 
         while (!input.equals("end")) {
-            String[] studentData = input.split(" ");
+            String[] studentData = input.trim().split("\\s+");
 
             String firstName = studentData[0];
             String lastName = studentData[1];
