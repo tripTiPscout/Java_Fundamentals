@@ -2,17 +2,50 @@ package Fundamentals;
 
 import java.util.*;
 
-public class DragonArmy {
+public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int lines = Integer.parseInt(scanner.nextLine());
+        int inputDataLines = Integer.parseInt(scanner.nextLine());
 
         Map<String, Map<String, int[]>> dragons = new LinkedHashMap<>();
 
-        for (int i = 1; i <= lines; i++) {
-            String[] dragonData = scanner.nextLine().split(" ");
+        readInputDragonsData(scanner, inputDataLines, dragons);
+
+        getAverageDragonStats(dragons);
+    }
+
+    private static void printDragonStats(Map<String, Map<String, int[]>> dragons, String dragonType, double damageAverage, double healthAverage, double armorAverage) {
+        System.out.printf("%s::(%.2f/%.2f/%.2f)\n", dragonType, damageAverage, healthAverage, armorAverage);
+
+        dragons.get(dragonType).forEach((dragonName, dragonDamageHealthArmor) ->
+                System.out.printf("-%s -> damage: %d, health: %d, armor: %d\n",
+                        dragonName, dragonDamageHealthArmor[0], dragonDamageHealthArmor[1], dragonDamageHealthArmor[2]));
+    }
+
+    private static void getAverageDragonStats(Map<String, Map<String, int[]>> dragons) {
+        dragons.forEach((dragonType, dragonNameAndStats) -> {
+            double damageAverage = 0;
+            double healthAverage = 0;
+            double armorAverage = 0;
+
+            for (int[] stateValues : dragonNameAndStats.values()) {
+                damageAverage += stateValues[0];
+                healthAverage += stateValues[1];
+                armorAverage += stateValues[2];
+            }
+            damageAverage /= dragonNameAndStats.size();
+            healthAverage /= dragonNameAndStats.size();
+            armorAverage /= dragonNameAndStats.size();
+
+            printDragonStats(dragons, dragonType, damageAverage, healthAverage, armorAverage);
+        });
+    }
+
+    private static void readInputDragonsData(Scanner scanner, int inputDataLines, Map<String, Map<String, int[]>> dragons) {
+        for (int i = 1; i <= inputDataLines; i++) {
+            String[] dragonData = scanner.nextLine().split("\\s+");
 
             String type = dragonData[0];
             String name = dragonData[1];
@@ -21,39 +54,18 @@ public class DragonArmy {
             int armor = dragonData[4].equals("null") ? 10 : Integer.parseInt(dragonData[4]);
 
             Map<String, int[]> nameAndStats = new TreeMap<>();
-            int[] stats = new int[3];
-            stats[0] = damage;
-            stats[1] = health;
-            stats[2] = armor;
-            nameAndStats.put(name, stats);
+            int[] damageHealthArmor = new int[3];
+            damageHealthArmor[0] = damage;
+            damageHealthArmor[1] = health;
+            damageHealthArmor[2] = armor;
+            nameAndStats.put(name, damageHealthArmor);
 
             if (!dragons.containsKey(type)) {
                 dragons.put(type, nameAndStats);
             } else {
                 dragons.get(type).remove(name);
-                dragons.get(type).put(name, stats);
+                dragons.get(type).put(name, damageHealthArmor);
             }
         }
-
-        dragons.forEach((key, value) -> {
-            double damageAvg = 0;
-            double healthAvg = 0;
-            double armorAvg = 0;
-            
-            for (int[] ints : value.values()) {
-                damageAvg += ints[0];
-                healthAvg += ints[1];
-                armorAvg += ints[2];
-            }
-            damageAvg /= value.size();
-            healthAvg /= value.size();
-            armorAvg /= value.size();
-
-            System.out.printf("%s::(%.2f/%.2f/%.2f)\n", key, damageAvg, healthAvg, armorAvg);
-            
-            dragons.get(key).forEach((k, v) -> System.out.printf("-%s -> damage: %d, health: %d, armor: %d\n", k, v[0], v[1], v[2]));
-        });
-
     }
-
 }
