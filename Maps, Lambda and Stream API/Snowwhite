@@ -1,0 +1,56 @@
+package Fundamentals;
+
+import java.util.*;
+
+public class Snowwhite {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+
+        Map<String, Map<String, Integer>> dwarfs = new LinkedHashMap<>();
+
+        while (!input.equals("Once upon a time")) {
+            String[] dwarfData = input.split("<:>");
+            
+            String name = dwarfData[0].trim();
+            String hatColor = dwarfData[1].trim();
+            int physics = Integer.parseInt(dwarfData[2].trim());
+
+            Map<String, Integer> namePhysics = new LinkedHashMap<>();
+
+            if (!dwarfs.containsKey(hatColor)) {
+                namePhysics.put(name, physics);
+                dwarfs.put(hatColor, namePhysics);
+            } else {
+                if (!dwarfs.get(hatColor).containsKey(name)) {
+                    dwarfs.get(hatColor).put(name, physics);
+                } else {
+                    if (dwarfs.get(hatColor).get(name) < physics) {
+                        dwarfs.get(hatColor).put(name, physics);
+                    }
+                }
+            }
+            input = scanner.nextLine();
+        }
+
+        Map<String, Integer> sortedDwarfs = new LinkedHashMap<>();
+
+        dwarfs.entrySet().stream()
+                .sorted((a, b) -> (b.getValue().values().stream().mapToInt(e -> e).sum()) - (a.getValue().values().stream().mapToInt(i -> i).sum()))
+                .forEach(entry -> entry
+                        .getValue()
+                        .entrySet()
+                        .stream()
+                        .sorted(Map.Entry.<String, Integer>comparingByValue()
+                                .reversed())
+                        .forEach(entry1 -> sortedDwarfs.put("(" + entry.getKey() + ") " + entry1.getKey(), entry1.getValue())));
+
+        sortedDwarfs
+                .entrySet()
+                .stream()
+                .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
+                .forEach(entry -> System.out.printf("%s <-> %d\n", entry.getKey(), entry.getValue()));        
+    }
+}
