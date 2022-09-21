@@ -1,0 +1,68 @@
+package Fundamentals;
+
+import java.util.*;
+
+public class MobaChallenger {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+
+        Map<String, Map<String, Integer>> players = new TreeMap<>();
+
+        while (!input.equals("Season end")) {
+            if (input.contains("->")) {
+                String[] data = input.split("->");
+
+                String player = data[0].trim();
+                String position = data[1].trim();
+                int skill = Integer.parseInt(data[2].trim());
+
+                Map<String, Integer> positionAndSkill = new TreeMap<>();
+
+                if (!players.containsKey(player)) {
+                    positionAndSkill.put(position, skill);
+                    players.put(player, positionAndSkill);
+                } else {
+                    if (!players.get(player).containsKey(position)) {
+                        players.get(player).put(position, skill);
+                    } else {
+                        if (players.get(player).get(position) < skill) {
+                            players.get(player).put(position, skill);
+                        }
+                    }
+                }
+            } else if (input.contains("vs")) {
+                String[] data = input.split("vs");
+
+                String playerOne = data[0].trim();
+                String playerTwo = data[1].trim();
+
+                if (players.containsKey(playerOne) && players.containsKey(playerTwo)) {
+                    if (players.get(playerOne).keySet().stream().anyMatch(e -> players.get(playerTwo).containsKey(e))) {
+                        if (players.get(playerOne).values().stream().mapToInt(e -> e).sum() > players.get(playerTwo).values().stream().mapToInt(e -> e).sum()) {
+                            players.remove(playerTwo);
+                        } else if (players.get(playerOne).values().stream().mapToInt(e -> e).sum() < players.get(playerTwo).values().stream().mapToInt(e -> e).sum()) {
+                            players.remove(playerOne);
+                        }
+                    }
+                }
+            }
+            input = scanner.nextLine();
+        }
+
+        players.entrySet().stream()
+                        .sorted((a, b) -> (b.getValue().values().stream().mapToInt(e -> e).sum()) - (a.getValue().values().stream().mapToInt(i -> i).sum()))
+                .forEach(entry -> {
+                    System.out.printf("%s: %d skill\n", entry.getKey(), entry.getValue().values().stream().mapToInt(e -> e).sum());
+                    entry.getValue().entrySet().stream()
+                            .sorted(Map.Entry.<String, Integer>comparingByValue()
+                                    .reversed()
+                                    .thenComparing(Map.Entry.comparingByKey()))
+                            .forEach(entry1 -> System.out.printf("- %s <::> %d\n", entry1.getKey(), entry1.getValue()));
+
+                });
+
+    }
+}
