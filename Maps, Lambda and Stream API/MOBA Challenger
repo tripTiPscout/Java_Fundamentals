@@ -13,56 +13,79 @@ public class MobaChallenger {
 
         while (!input.equals("Season end")) {
             if (input.contains("->")) {
-                String[] data = input.split("->");
-
-                String player = data[0].trim();
-                String position = data[1].trim();
-                int skill = Integer.parseInt(data[2].trim());
-
-                Map<String, Integer> positionAndSkill = new TreeMap<>();
-
-                if (!players.containsKey(player)) {
-                    positionAndSkill.put(position, skill);
-                    players.put(player, positionAndSkill);
-                } else {
-                    if (!players.get(player).containsKey(position)) {
-                        players.get(player).put(position, skill);
-                    } else {
-                        if (players.get(player).get(position) < skill) {
-                            players.get(player).put(position, skill);
-                        }
-                    }
-                }
+                
+                trackPlayers(input, players);
+                
             } else if (input.contains("vs")) {
-                String[] data = input.split("vs");
-
-                String playerOne = data[0].trim();
-                String playerTwo = data[1].trim();
-
-                if (players.containsKey(playerOne) && players.containsKey(playerTwo)) {
-                    if (players.get(playerOne).keySet().stream().anyMatch(e -> players.get(playerTwo).containsKey(e))) {
-                        if (players.get(playerOne).values().stream().mapToInt(e -> e).sum() > players.get(playerTwo).values().stream().mapToInt(e -> e).sum()) {
-                            players.remove(playerTwo);
-                        } else if (players.get(playerOne).values().stream().mapToInt(e -> e).sum() < players.get(playerTwo).values().stream().mapToInt(e -> e).sum()) {
-                            players.remove(playerOne);
-                        }
-                    }
-                }
+                
+                duelPlayers(input, players);
             }
+            
             input = scanner.nextLine();
         }
 
         players.entrySet().stream()
-                        .sorted((a, b) -> (b.getValue().values().stream().mapToInt(e -> e).sum()) - (a.getValue().values().stream().mapToInt(i -> i).sum()))
-                .forEach(entry -> {
-                    System.out.printf("%s: %d skill\n", entry.getKey(), entry.getValue().values().stream().mapToInt(e -> e).sum());
-                    entry.getValue().entrySet().stream()
-                            .sorted(Map.Entry.<String, Integer>comparingByValue()
-                                    .reversed()
-                                    .thenComparing(Map.Entry.comparingByKey()))
-                            .forEach(entry1 -> System.out.printf("- %s <::> %d\n", entry1.getKey(), entry1.getValue()));
+                .sorted(Main::sortPlayers)
+                .forEach(Main::printPlayer);
+    }
 
-                });
+    private static int sortPlayers(Map.Entry<String, Map<String, Integer>> a, Map.Entry<String, Map<String, Integer>> b) {
+        int skillsPlayerA = a.getValue().values().stream().mapToInt(e -> e).sum();
+        int skillsPlayerB = b.getValue().values().stream().mapToInt(e -> e).sum();
+        return skillsPlayerB - skillsPlayerA;
+    }
 
+    private static void printPlayer(Map.Entry<String, Map<String, Integer>> player) {
+        int skills = player.getValue().values().stream().mapToInt(e -> e).sum();
+        System.out.printf("%s: %d skill\n", player.getKey(), skills);
+        player.getValue().entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue()
+                        .reversed()
+                        .thenComparing(Map.Entry.comparingByKey()))
+                .forEach(positionAndSkills -> System.out.printf("- %s <::> %d\n", positionAndSkills.getKey(), positionAndSkills.getValue()));
+    }
+
+    private static void duelPlayers(String input, Map<String, Map<String, Integer>> players) {
+        String[] data = input.split("vs");
+
+        String playerOne = data[0].trim();
+        String playerTwo = data[1].trim();
+
+        if (players.containsKey(playerOne) && players.containsKey(playerTwo)) {
+            if (players.get(playerOne).keySet().stream().anyMatch(e -> players.get(playerTwo).containsKey(e))) {
+
+                int playerOneSkills = players.get(playerOne).values().stream().mapToInt(e -> e).sum();
+                int playerTwoSkills = players.get(playerTwo).values().stream().mapToInt(e -> e).sum();
+
+                if (playerOneSkills > playerTwoSkills) {
+                    players.remove(playerTwo);
+                } else if (playerOneSkills < playerTwoSkills) {
+                    players.remove(playerOne);
+                }
+            }
+        }
+    }
+
+    private static void trackPlayers(String input, Map<String, Map<String, Integer>> players) {
+        String[] data = input.split("->");
+
+        String player = data[0].trim();
+        String position = data[1].trim();
+        int skill = Integer.parseInt(data[2].trim());
+
+        Map<String, Integer> positionAndSkill = new TreeMap<>();
+
+        if (!players.containsKey(player)) {
+            positionAndSkill.put(position, skill);
+            players.put(player, positionAndSkill);
+        } else {
+            if (!players.get(player).containsKey(position)) {
+                players.get(player).put(position, skill);
+            } else {
+                if (players.get(player).get(position) < skill) {
+                    players.get(player).put(position, skill);
+                }
+            }
+        }
     }
 }
