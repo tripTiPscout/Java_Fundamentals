@@ -1,0 +1,80 @@
+package Fundamentals;
+
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class Judge {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+
+        Map<String, Map<String, Integer>> contests = new LinkedHashMap<>();
+        Map<String, Integer> users = new TreeMap<>();
+
+        while (!input.equals("no more time")) {
+            String[] data = input.split("->");
+
+            String username = data[0].trim();
+            String contest = data[1].trim();
+            int points = Integer.parseInt(data[2].trim());
+
+            Map<String, Integer> newParticipant = new LinkedHashMap<>();
+
+            if (!contests.containsKey(contest)) {
+                newParticipant.put(username, points);
+                contests.put(contest, newParticipant);
+            } else {
+                if (!contests.get(contest).containsKey(username)) {
+                    contests.get(contest).put(username, points);
+                } else {
+                    if (contests.get(contest).get(username) < points) {
+                        contests.get(contest).put(username, points);
+                        users.put(username, 0);
+                    } else {
+                        input = scanner.nextLine();
+                        continue;
+                    }
+                }
+            }
+            
+            if (!users.containsKey(username)) {
+                users.put(username, points);
+            } else {
+                if (contests.get(contest).containsKey(username) && contests.get(contest).get(username) < points) {
+                    users.remove(username);
+                }
+                users.put(username, users.get(username) + points);
+            }
+            
+            input = scanner.nextLine();
+        }
+
+        contests.forEach((key, value) -> {
+            int[] positionCount = new int[1];
+            
+            System.out.printf("%s: %d participants\n", key, value.size());
+            
+            value.entrySet().stream()
+                    .sorted(Map.Entry.<String, Integer>comparingByValue()
+                            .reversed()
+                            .thenComparing(Map.Entry.comparingByKey()))
+                    .forEach(entry -> {                   
+                        int position = (positionCount[0]++) + 1;
+                        
+                        System.out.printf("%d. %s <::> %d\n", position, entry.getKey(), entry.getValue());
+                    });
+        });
+
+        System.out.println("Individual standings:");
+
+        AtomicInteger positionNum = new AtomicInteger(1);
+
+        users.entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue()
+                        .reversed()
+                        .thenComparing(Map.Entry.comparingByKey()))
+                .forEach(entry -> System.out.printf("%d. %s -> %d\n", positionNum.getAndIncrement(), entry.getKey(), entry.getValue()));
+    }
+}
