@@ -8,58 +8,67 @@ public class ArrayManipulator {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int[] numbers = Arrays.stream(scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        int[] numbers = Arrays.stream(scanner.nextLine().split("\\s+")).mapToInt(Integer::parseInt).toArray();
 
         String input = scanner.nextLine();
 
+        numbers = readOperations(scanner, numbers, input);
+
+        System.out.println(Arrays.toString(numbers));
+    }
+
+    private static int[] readOperations(Scanner scanner, int[] numbers, String input) {
         while (!input.equals("end")) {
-            String[] command = input.split(" ");
-            switch (command[0]) {
+            String[] commands = input.split("\\s+");
+            
+            String commandA = commands[0];
+            String commandB = commands[1];
+            String commandC = commands[2];
+            
+            switch (commandA) {
                 case "exchange":
-                    numbers = getExchangedArray(numbers, Integer.parseInt(command[1]));
+                    numbers = getExchangedArray(numbers, Integer.parseInt(commandB));
                     break;
                 case "max":
-                    if (command[1].equals("even")) {
+                    if (commandB.equals("even")) {
                         printMaxEvenIndex(numbers);
-                    } else if (command[1].equals("odd")) {
+                    } else if (commandB.equals("odd")) {
                         printMaxOddIndex(numbers);
                     }
                     break;
                 case "min":
-                    if (command[1].equals("even")) {
+                    if (commandB.equals("even")) {
                         printMinEvenIndex(numbers);
-                    } else if (command[1].equals("odd")) {
+                    } else if (commandB.equals("odd")) {
                         printMinOddIndex(numbers);
                     }
                     break;
                 case "first":
-                    int countFirst = Integer.parseInt(command[1]);
-                    if (command[2].equals("even")) {
+                    int countFirst = Integer.parseInt(commandB);
+                    if (commandC.equals("even")) {
                         printFirstEvenElements(numbers, countFirst);
-                    } else if (command[2].equals("odd")) {
+                    } else if (commandC.equals("odd")) {
                         printFirstOddElements(numbers, countFirst);
                     }
                     break;
                 case "last":
-                    int countLast = Integer.parseInt(command[1]);
-                    if (command[2].equals("even")) {
+                    int countLast = Integer.parseInt(commandB);
+                    if (commandC.equals("even")) {
                         printLastEvenElements(numbers, countLast);
-                    } else if (command[2].equals("odd")) {
+                    } else if (commandC.equals("odd")) {
                         printLastOddElements(numbers, countLast);
                     }
                     break;
             }
             input = scanner.nextLine();
         }
-
-        System.out.println(Arrays.toString(numbers));
-
+        return numbers;
     }
 
     private static int[] getExchangedArray(int[] numbers, int index) {
         int[] exchangedArray = new int[numbers.length];
         int counter = 0;
-        
+
         if (index < 0 || index >= numbers.length) {
             System.out.println("Invalid index");
         } else {
@@ -77,7 +86,7 @@ public class ArrayManipulator {
     private static void printMaxEvenIndex(int[] numbers) {
         int maxEven = Integer.MIN_VALUE;
         int currentIndex = -1;
-        
+
         for (int i = 0; i < numbers.length ; i++) {
             if (numbers[i] % 2 == 0 && numbers[i] >= maxEven) {
                 maxEven = numbers[i];
@@ -94,14 +103,14 @@ public class ArrayManipulator {
     private static void printMaxOddIndex(int[] numbers) {
         int maxOdd = Integer.MIN_VALUE;
         int currentIndex = -1;
-        
+
         for (int i = 0; i < numbers.length ; i++) {
             if (numbers[i] % 2 != 0 && numbers[i] >= maxOdd) {
                 maxOdd = numbers[i];
                 currentIndex = i;
             }
         }
-        
+
         if (currentIndex == -1) {
             System.out.println("No matches");
         } else {
@@ -112,14 +121,14 @@ public class ArrayManipulator {
     private static void printMinEvenIndex(int[] numbers) {
         int minEven = Integer.MAX_VALUE;
         int currentIndex = -1;
-        
+
         for (int i = 0; i < numbers.length ; i++) {
             if (numbers[i] % 2 == 0 && numbers[i] <= minEven) {
                 minEven = numbers[i];
                 currentIndex = i;
             }
         }
-        
+
         if (currentIndex == -1) {
             System.out.println("No matches");
         } else {
@@ -130,14 +139,14 @@ public class ArrayManipulator {
     private static void printMinOddIndex(int[] numbers) {
         int minOdd = Integer.MAX_VALUE;
         int currentIndex = -1;
-        
+
         for (int i = 0; i < numbers.length ; i++) {
             if (numbers[i] % 2 != 0 && numbers[i] <= minOdd) {
                 minOdd = numbers[i];
                 currentIndex = i;
             }
         }
-        
+
         if (currentIndex == -1) {
             System.out.println("No matches");
         } else {
@@ -154,9 +163,9 @@ public class ArrayManipulator {
         int index = 0;
         int[] result = new int[numbers.length];
 
-        for (int i = 0; i < numbers.length ; i++) {
-            if (numbers[i] % 2 == 0) {
-                result[index++] = numbers[i];
+        for (int number : numbers) {
+            if (number % 2 == 0) {
+                result[index++] = number;
                 if (index == count) {
                     break;
                 }
@@ -187,9 +196,9 @@ public class ArrayManipulator {
         int index = 0;
         int[] result = new int[numbers.length];
 
-        for (int i = 0; i < numbers.length ; i++) {
-            if (numbers[i] % 2 != 0) {
-                result[index++] = numbers[i];
+        for (int number : numbers) {
+            if (number % 2 != 0) {
+                result[index++] = number;
                 if (index == count) {
                     break;
                 }
@@ -216,13 +225,13 @@ public class ArrayManipulator {
             System.out.println("Invalid count");
             return;
         }
-        
+
         int counter = 0;
         int[] firstEvenElements = new int[numbers.length];
 
-        for (int i = 0; i < numbers.length ; i++) {
-            if (numbers[i] % 2 == 0) {
-                firstEvenElements[counter++] = numbers[i];
+        for (int number : numbers) {
+            if (number % 2 == 0) {
+                firstEvenElements[counter++] = number;
             }
         }
 
@@ -250,13 +259,13 @@ public class ArrayManipulator {
             System.out.println("Invalid count");
             return;
         }
-        
+
         int counter = 0;
         int[] firstOddElements = new int[numbers.length];
 
-        for (int i = 0; i < numbers.length ; i++) {
-            if (numbers[i] % 2 != 0) {
-                firstOddElements[counter++] = numbers[i];
+        for (int number : numbers) {
+            if (number % 2 != 0) {
+                firstOddElements[counter++] = number;
             }
         }
 
@@ -278,5 +287,5 @@ public class ArrayManipulator {
             System.out.println(output);
         }
     }
-
+    
 }
