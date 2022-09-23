@@ -9,6 +9,10 @@ public class TopNumber {
 
         int num = Integer.parseInt(scanner.nextLine());
 
+        iterateToNum(num);
+    }
+
+    private static void iterateToNum(int num) {
         for (int index = 1; index <= num; index++) {
             boolean isDivisible = checkIsDivisible(index);
             boolean holdOddDigit = checkHoldOddDigit(index);
