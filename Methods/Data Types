@@ -10,18 +10,20 @@ public class DataTypes {
         String type = scanner.nextLine();
         String input = scanner.nextLine();
 
+        typeChecker(type, input);
+    }
+
+    private static void typeChecker(String type, String input) {
         switch (type) {
-            case "int":
+            case "int" -> {
                 int num = Integer.parseInt(input);
                 printResult(num);
-                break;
-            case "real":
+            }
+            case "real" -> {
                 double number = Double.parseDouble(input);
                 printResult(number);
-                break;
-            case "string":
-                printResult(input);
-                break;
+            }
+            case "string" -> printResult(input);
         }
     }
 
@@ -37,5 +39,5 @@ public class DataTypes {
     private static void printResult(String text) {
         System.out.printf("$%s$",text);
     }
-    
+
 }
