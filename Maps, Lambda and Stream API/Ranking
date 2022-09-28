@@ -1,0 +1,80 @@
+package Fundamentals;
+
+import java.util.*;
+
+public class Ranking {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String inputContests = scanner.nextLine();
+
+        Map<String, String> contests = new LinkedHashMap<>();
+
+        while (!inputContests.equals("end of contests")) {
+            String[] contestData = inputContests.split(":");
+
+            String contest = contestData[0];
+            String password = contestData[1];
+
+            contests.put(contest, password);
+
+            inputContests = scanner.nextLine();
+        }
+
+        String inputSubmissions = scanner.nextLine();
+
+        Map<String, Map<String, Integer>> students = new TreeMap<>();
+
+        while (!inputSubmissions.equals("end of submissions")) {
+            String[] submissionsData = inputSubmissions.split("=>");
+
+            String contestToSubmit = submissionsData[0];
+            String passwordToSubmit = submissionsData[1];
+            String username = submissionsData[2];
+            int points = Integer.parseInt(submissionsData[3]);
+
+            Map<String, Integer> userContest;
+
+            if (contests.containsKey(contestToSubmit) && contests.get(contestToSubmit).equals(passwordToSubmit)) {
+                if (!students.containsKey(username)) {
+                    userContest = new LinkedHashMap<>();
+                    userContest.put(contestToSubmit, points);
+                    students.put(username, userContest);
+                } else {
+                    if (students.get(username).containsKey(contestToSubmit) && students.get(username).get(contestToSubmit) > points) {
+                        inputSubmissions = scanner.nextLine();
+                        continue;
+                    } else {
+                        students.get(username).put(contestToSubmit, points);
+                    }
+                }
+            }
+            
+            inputSubmissions = scanner.nextLine();
+        }
+
+        String bestStudent = "";
+        int bestPoints = 0;
+
+        for (Map.Entry<String, Map<String, Integer>> student : students.entrySet()) {
+            int maxPoints = student.getValue().values().stream().mapToInt(e -> e).sum();
+            if (maxPoints >= bestPoints) {
+                bestPoints = maxPoints;
+                bestStudent = student.getKey();
+            }
+        }
+
+        System.out.printf("Best candidate is %s with total %d points.\n", bestStudent, bestPoints);
+
+        System.out.println("Ranking:");
+
+        students.forEach((key, value) -> {
+            System.out.printf("%s\n", key);
+            value.entrySet().stream().
+                    sorted((a, b) -> b.getValue() - a.getValue()).
+                    forEach(e -> System.out.printf("#  %s -> %d\n", e.getKey(), e.getValue()));
+        });
+
+    }
+}
