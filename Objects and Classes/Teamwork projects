@@ -11,6 +11,17 @@ public class TeamworkProjects {
 
         assignTeams(scanner, teams);
 
+        joinPlayers(scanner, teams);
+
+        teams.sort(Comparator.comparing(Team::getName));
+        teams.sort(Comparator.comparing(Team::membersCount).reversed());
+
+        printTeams(teams);
+
+        printDisbandedTeams(teams);
+    }
+
+    private static void joinPlayers(Scanner scanner, List<Team> teams) {
         String inputCommand = scanner.nextLine();
 
         while (!inputCommand.equals("end of assignment")) {
@@ -35,13 +46,6 @@ public class TeamworkProjects {
 
             inputCommand = scanner.nextLine();
         }
-
-        teams.sort(Comparator.comparing(Team::getName));
-        teams.sort(Comparator.comparing(Team::membersCount).reversed());
-
-        printTeams(teams);
-
-        printDisbandedTeams(teams);
     }
 
     private static void assignTeams(Scanner scanner, List<Team> teams) {
