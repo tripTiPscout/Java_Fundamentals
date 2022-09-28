@@ -7,29 +7,9 @@ public class TeamworkProjects {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int teamCount = Integer.parseInt(scanner.nextLine());
-
         List<Team> teams = new ArrayList<>();
 
-        for (int i = 1; i <= teamCount; i++) {
-            String[] inputCreatorTeam = scanner.nextLine().split("-");
-
-            String creator = inputCreatorTeam[0];
-            String team = inputCreatorTeam[1];
-
-            Team newTeam = new Team(team, creator);
-
-            if (isTeamDoNotExist(teams, team)  && (!isMemberExist(teams, creator))) {
-                teams.add(newTeam);
-                System.out.printf("Team %s has been created by %s!\n", team, creator);
-            } else {
-                if (!isTeamDoNotExist(teams, team)) {
-                    System.out.printf("Team %s was already created!\n", team);
-                } else if (isMemberExist(teams, creator)) {
-                    System.out.printf("%s cannot create another team!\n", creator);
-                }
-            }
-        }
+        assignTeams(scanner, teams);
 
         String inputCommand = scanner.nextLine();
 
@@ -62,6 +42,30 @@ public class TeamworkProjects {
         printTeams(teams);
 
         printDisbandedTeams(teams);
+    }
+
+    private static void assignTeams(Scanner scanner, List<Team> teams) {
+        int teamCount = Integer.parseInt(scanner.nextLine());
+
+        for (int i = 1; i <= teamCount; i++) {
+            String[] inputCreatorTeam = scanner.nextLine().split("-");
+
+            String creator = inputCreatorTeam[0];
+            String team = inputCreatorTeam[1];
+
+            Team newTeam = new Team(team, creator);
+
+            if (isTeamDoNotExist(teams, team)  && (!isMemberExist(teams, creator))) {
+                teams.add(newTeam);
+                System.out.printf("Team %s has been created by %s!\n", team, creator);
+            } else {
+                if (!isTeamDoNotExist(teams, team)) {
+                    System.out.printf("Team %s was already created!\n", team);
+                } else if (isMemberExist(teams, creator)) {
+                    System.out.printf("%s cannot create another team!\n", creator);
+                }
+            }
+        }
     }
 
     private static void printDisbandedTeams(List<Team> teams) {
