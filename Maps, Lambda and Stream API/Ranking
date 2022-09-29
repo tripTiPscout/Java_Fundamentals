@@ -7,24 +7,13 @@ public class Ranking {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        String inputContests = scanner.nextLine();
-
         Map<String, String> contests = new LinkedHashMap<>();
 
-        while (!inputContests.equals("end of contests")) {
-            String[] contestData = inputContests.split(":");
-
-            String contest = contestData[0];
-            String password = contestData[1];
-
-            contests.put(contest, password);
-
-            inputContests = scanner.nextLine();
-        }
-
-        String inputSubmissions = scanner.nextLine();
+        submitContests(scanner, contests);
 
         Map<String, Map<String, Integer>> students = new TreeMap<>();
+
+        String inputSubmissions = scanner.nextLine();
 
         while (!inputSubmissions.equals("end of submissions")) {
             String[] submissionsData = inputSubmissions.split("=>");
@@ -50,7 +39,7 @@ public class Ranking {
                     }
                 }
             }
-            
+
             inputSubmissions = scanner.nextLine();
         }
 
@@ -76,5 +65,20 @@ public class Ranking {
                     forEach(e -> System.out.printf("#  %s -> %d\n", e.getKey(), e.getValue()));
         });
 
+    }
+
+    private static void submitContests(Scanner scanner, Map<String, String> contests) {
+        String inputContests = scanner.nextLine();
+
+        while (!inputContests.equals("end of contests")) {
+            String[] contestData = inputContests.split(":");
+
+            String contest = contestData[0];
+            String password = contestData[1];
+
+            contests.put(contest, password);
+
+            inputContests = scanner.nextLine();
+        }
     }
 }
