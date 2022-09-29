@@ -7,13 +7,35 @@ public class Snowwhite {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        String input = scanner.nextLine();
-
         Map<String, Map<String, Integer>> dwarfs = new LinkedHashMap<>();
+
+        collectDwarfs(scanner, dwarfs);
+
+        Map<String, Integer> sortedDwarfs = new LinkedHashMap<>();
+
+        dwarfs.entrySet().stream()
+                .sorted((a, b) -> (b.getValue().values().stream().mapToInt(e -> e).sum()) - (a.getValue().values().stream().mapToInt(i -> i).sum()))
+                .forEach(entry -> entry
+                        .getValue()
+                        .entrySet()
+                        .stream()
+                        .sorted(Map.Entry.<String, Integer>comparingByValue()
+                                .reversed())
+                        .forEach(entry1 -> sortedDwarfs.put("(" + entry.getKey() + ") " + entry1.getKey(), entry1.getValue())));
+
+        sortedDwarfs
+                .entrySet()
+                .stream()
+                .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
+                .forEach(entry -> System.out.printf("%s <-> %d\n", entry.getKey(), entry.getValue()));
+    }
+
+    private static void collectDwarfs(Scanner scanner, Map<String, Map<String, Integer>> dwarfs) {
+        String input = scanner.nextLine();
 
         while (!input.equals("Once upon a time")) {
             String[] dwarfData = input.split("<:>");
-            
+
             String name = dwarfData[0].trim();
             String hatColor = dwarfData[1].trim();
             int physics = Integer.parseInt(dwarfData[2].trim());
@@ -34,23 +56,5 @@ public class Snowwhite {
             }
             input = scanner.nextLine();
         }
-
-        Map<String, Integer> sortedDwarfs = new LinkedHashMap<>();
-
-        dwarfs.entrySet().stream()
-                .sorted((a, b) -> (b.getValue().values().stream().mapToInt(e -> e).sum()) - (a.getValue().values().stream().mapToInt(i -> i).sum()))
-                .forEach(entry -> entry
-                        .getValue()
-                        .entrySet()
-                        .stream()
-                        .sorted(Map.Entry.<String, Integer>comparingByValue()
-                                .reversed())
-                        .forEach(entry1 -> sortedDwarfs.put("(" + entry.getKey() + ") " + entry1.getKey(), entry1.getValue())));
-
-        sortedDwarfs
-                .entrySet()
-                .stream()
-                .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
-                .forEach(entry -> System.out.printf("%s <-> %d\n", entry.getKey(), entry.getValue()));        
     }
 }
