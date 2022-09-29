@@ -26,6 +26,11 @@ public class Ranking {
             }
         }
 
+        printBestResultsAndRanking(students, bestStudent, bestPoints);
+
+    }
+
+    private static void printBestResultsAndRanking(Map<String, Map<String, Integer>> students, String bestStudent, int bestPoints) {
         System.out.printf("Best candidate is %s with total %d points.\n", bestStudent, bestPoints);
 
         System.out.println("Ranking:");
@@ -36,7 +41,6 @@ public class Ranking {
                     sorted((a, b) -> b.getValue() - a.getValue()).
                     forEach(e -> System.out.printf("#  %s -> %d\n", e.getKey(), e.getValue()));
         });
-
     }
 
     private static void contestSubmissions(Scanner scanner, Map<String, String> contests, Map<String, Map<String, Integer>> students) {
@@ -50,13 +54,13 @@ public class Ranking {
             String username = submissionsData[2];
             int points = Integer.parseInt(submissionsData[3]);
 
-            Map<String, Integer> userContest;
+            Map<String, Integer> userPoints;
 
             if (contests.containsKey(contestToSubmit) && contests.get(contestToSubmit).equals(passwordToSubmit)) {
                 if (!students.containsKey(username)) {
-                    userContest = new LinkedHashMap<>();
-                    userContest.put(contestToSubmit, points);
-                    students.put(username, userContest);
+                    userPoints = new LinkedHashMap<>();
+                    userPoints.put(contestToSubmit, points);
+                    students.put(username, userPoints);
                 } else {
                     if (students.get(username).containsKey(contestToSubmit) && students.get(username).get(contestToSubmit) > points) {
                         inputSubmissions = scanner.nextLine();
