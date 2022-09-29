@@ -11,6 +11,16 @@ public class Snowwhite {
 
         collectDwarfs(scanner, dwarfs);
 
+        Map<String, Integer> sortedDwarfs = getSortedDwarfs(dwarfs);
+
+        sortedDwarfs
+                .entrySet()
+                .stream()
+                .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
+                .forEach(entry -> System.out.printf("%s <-> %d\n", entry.getKey(), entry.getValue()));
+    }
+
+    private static Map<String, Integer> getSortedDwarfs(Map<String, Map<String, Integer>> dwarfs) {
         Map<String, Integer> sortedDwarfs = new LinkedHashMap<>();
 
         dwarfs.entrySet().stream()
@@ -22,12 +32,7 @@ public class Snowwhite {
                         .sorted(Map.Entry.<String, Integer>comparingByValue()
                                 .reversed())
                         .forEach(entry1 -> sortedDwarfs.put("(" + entry.getKey() + ") " + entry1.getKey(), entry1.getValue())));
-
-        sortedDwarfs
-                .entrySet()
-                .stream()
-                .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
-                .forEach(entry -> System.out.printf("%s <-> %d\n", entry.getKey(), entry.getValue()));
+        return sortedDwarfs;
     }
 
     private static void collectDwarfs(Scanner scanner, Map<String, Map<String, Integer>> dwarfs) {
