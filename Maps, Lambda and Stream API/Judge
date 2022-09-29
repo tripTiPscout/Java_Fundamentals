@@ -13,6 +13,24 @@ public class Judge {
 
         collectUsersAndContests(scanner, users, contests);
 
+        printContestsStandings(contests);
+
+        printPersonalStandings(users);
+    }
+
+    private static void printPersonalStandings(Map<String, Integer> users) {
+        System.out.println("Individual standings:");
+
+        AtomicInteger positionNum = new AtomicInteger(1);
+
+        users.entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue()
+                        .reversed()
+                        .thenComparing(Map.Entry.comparingByKey()))
+                .forEach(entry -> System.out.printf("%d. %s -> %d\n", positionNum.getAndIncrement(), entry.getKey(), entry.getValue()));
+    }
+
+    private static void printContestsStandings(Map<String, Map<String, Integer>> contests) {
         contests.forEach((key, value) -> {
             int[] positionCount = new int[1];
 
@@ -28,16 +46,6 @@ public class Judge {
                         System.out.printf("%d. %s <::> %d\n", position, entry.getKey(), entry.getValue());
                     });
         });
-
-        System.out.println("Individual standings:");
-
-        AtomicInteger positionNum = new AtomicInteger(1);
-
-        users.entrySet().stream()
-                .sorted(Map.Entry.<String, Integer>comparingByValue()
-                        .reversed()
-                        .thenComparing(Map.Entry.comparingByKey()))
-                .forEach(entry -> System.out.printf("%d. %s -> %d\n", positionNum.getAndIncrement(), entry.getKey(), entry.getValue()));
     }
 
     private static void collectUsersAndContests(Scanner scanner, Map<String, Integer> users, Map<String, Map<String, Integer>> contests) {
