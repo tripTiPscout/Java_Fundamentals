@@ -9,10 +9,37 @@ public class Ranking {
 
         Map<String, String> contests = new LinkedHashMap<>();
 
-        submitContests(scanner, contests);
+        collectContests(scanner, contests);
 
         Map<String, Map<String, Integer>> students = new TreeMap<>();
 
+        contestSubmissions(scanner, contests, students);
+
+        String bestStudent = "";
+        int bestPoints = 0;
+
+        for (Map.Entry<String, Map<String, Integer>> student : students.entrySet()) {
+            int maxPoints = student.getValue().values().stream().mapToInt(e -> e).sum();
+            if (maxPoints >= bestPoints) {
+                bestPoints = maxPoints;
+                bestStudent = student.getKey();
+            }
+        }
+
+        System.out.printf("Best candidate is %s with total %d points.\n", bestStudent, bestPoints);
+
+        System.out.println("Ranking:");
+
+        students.forEach((key, value) -> {
+            System.out.printf("%s\n", key);
+            value.entrySet().stream().
+                    sorted((a, b) -> b.getValue() - a.getValue()).
+                    forEach(e -> System.out.printf("#  %s -> %d\n", e.getKey(), e.getValue()));
+        });
+
+    }
+
+    private static void contestSubmissions(Scanner scanner, Map<String, String> contests, Map<String, Map<String, Integer>> students) {
         String inputSubmissions = scanner.nextLine();
 
         while (!inputSubmissions.equals("end of submissions")) {
@@ -42,32 +69,9 @@ public class Ranking {
 
             inputSubmissions = scanner.nextLine();
         }
-
-        String bestStudent = "";
-        int bestPoints = 0;
-
-        for (Map.Entry<String, Map<String, Integer>> student : students.entrySet()) {
-            int maxPoints = student.getValue().values().stream().mapToInt(e -> e).sum();
-            if (maxPoints >= bestPoints) {
-                bestPoints = maxPoints;
-                bestStudent = student.getKey();
-            }
-        }
-
-        System.out.printf("Best candidate is %s with total %d points.\n", bestStudent, bestPoints);
-
-        System.out.println("Ranking:");
-
-        students.forEach((key, value) -> {
-            System.out.printf("%s\n", key);
-            value.entrySet().stream().
-                    sorted((a, b) -> b.getValue() - a.getValue()).
-                    forEach(e -> System.out.printf("#  %s -> %d\n", e.getKey(), e.getValue()));
-        });
-
     }
 
-    private static void submitContests(Scanner scanner, Map<String, String> contests) {
+    private static void collectContests(Scanner scanner, Map<String, String> contests) {
         String inputContests = scanner.nextLine();
 
         while (!inputContests.equals("end of contests")) {
