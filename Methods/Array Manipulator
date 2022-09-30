@@ -10,21 +10,21 @@ public class ArrayManipulator {
 
         int[] numbers = Arrays.stream(scanner.nextLine().split("\\s+")).mapToInt(Integer::parseInt).toArray();
 
-        String input = scanner.nextLine();
-
-        numbers = readOperations(scanner, numbers, input);
+        numbers = readOperations(scanner, numbers);
 
         System.out.println(Arrays.toString(numbers));
     }
 
-    private static int[] readOperations(Scanner scanner, int[] numbers, String input) {
+    private static int[] readOperations(Scanner scanner, int[] numbers) {
+        String input = scanner.nextLine();
+
         while (!input.equals("end")) {
             String[] commands = input.split("\\s+");
-            
+
             String commandA = commands[0];
             String commandB = commands[1];
             String commandC = commands[2];
-            
+
             switch (commandA) {
                 case "exchange":
                     numbers = getExchangedArray(numbers, Integer.parseInt(commandB));
