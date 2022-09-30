@@ -13,6 +13,10 @@ public class Snowwhite {
 
         Map<String, Integer> sortedDwarfs = getSortedDwarfs(dwarfs);
 
+        printSortedDwarfs(sortedDwarfs);
+    }
+
+    private static void printSortedDwarfs(Map<String, Integer> sortedDwarfs) {
         sortedDwarfs
                 .entrySet()
                 .stream()
