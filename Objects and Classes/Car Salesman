@@ -13,6 +13,15 @@ public class CarSalesman {
 
         List<Car> cars = new ArrayList<>();
 
+        listCars(scanner, engines, cars);
+
+        for (Car car : cars) {
+            System.out.println(car);
+        }
+
+    }
+
+    private static void listCars(Scanner scanner, List<Engine> engines, List<Car> cars) {
         int carsCount = Integer.parseInt(scanner.nextLine());
 
         for (int i = 1; i <= carsCount; i++) {
@@ -41,11 +50,6 @@ public class CarSalesman {
                 }
             }
         }
-
-        for (Car car : cars) {
-            System.out.println(car);
-        }
-
     }
 
     private static void listEngines(Scanner scanner, List<Engine> engines) {
