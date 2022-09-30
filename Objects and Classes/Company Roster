@@ -8,37 +8,53 @@ public class CompanyRoster {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int lines = Integer.parseInt(scanner.nextLine());
+        int inputLines = Integer.parseInt(scanner.nextLine());
 
         List<Employee> employees = new ArrayList<>();
 
-        fillEmployeeList(scanner, lines, employees);
+        listEmployees(scanner, inputLines, employees);
 
-        List<String> departmentsList = employees.stream()
-                .map(Employee::getDepartment)
-                .distinct()
-                .collect(Collectors.toList());
+        List<String> departmentsList = getDepartmentsList(employees);
 
         List<Department> departments = new ArrayList<>();
 
+        listEmployeesToDepartments(employees, departmentsList, departments);
+
+        sortDepartmentsBySelary(departments);
+
+        Department highestSalaryDepartment = departments.get(0);
+
+        sortEmployeesInDepartment(highestSalaryDepartment);
+
+        printDepartmentAndEmployees(highestSalaryDepartment);
+    }
+
+    private static void sortEmployeesInDepartment(Department highestSalaryDepartment) {
+        highestSalaryDepartment.getEmployees()
+                .sort(Comparator.comparingDouble(Employee::getSalary)
+                        .reversed());
+    }
+
+    private static void sortDepartmentsBySelary(List<Department> departments) {
+        departments
+                .sort(Comparator.comparingDouble(Department::getAverageSalary)
+                        .reversed());
+    }
+
+    private static void listEmployeesToDepartments(List<Employee> employees, List<String> departmentsList, List<Department> departments) {
         for (String department : departmentsList) {
             departments.add(new Department(department, employees.stream()
                     .filter(employee -> employee.getDepartment()
                             .equals(department))
                     .collect(Collectors.toList())));
         }
+    }
 
-        departments
-                .sort(Comparator.comparingDouble(Department::getAverageSalary)
-                        .reversed());
-        
-        Department highestSalaryDepartment = departments.get(0);
-        
-        highestSalaryDepartment.getEmployees()
-                .sort(Comparator.comparingDouble(Employee::getSalary)
-                        .reversed());
-
-        printDepartmentAndEmployees(highestSalaryDepartment);
+    private static List<String> getDepartmentsList(List<Employee> employees) {
+        return employees.stream()
+                .map(Employee::getDepartment)
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     private static void printDepartmentAndEmployees(Department department) {
@@ -48,8 +64,8 @@ public class CompanyRoster {
         }
     }
 
-    private static void fillEmployeeList(Scanner scanner, int lines, List<Employee> employees) {
-        for (int i = 1; i <= lines; i++) {
+    private static void listEmployees(Scanner scanner, int inputLines, List<Employee> employees) {
+        for (int i = 1; i <= inputLines; i++) {
             String[] inputData = scanner.nextLine().split(" ");
 
             String employeeName = inputData[0];
