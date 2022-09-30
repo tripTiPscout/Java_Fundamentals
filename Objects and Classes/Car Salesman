@@ -7,36 +7,13 @@ public class CarSalesman {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int enginesCount = Integer.parseInt(scanner.nextLine());
-
         List<Engine> engines = new ArrayList<>();
 
-        for (int i = 1; i <= enginesCount; i++) {
-            String[] inputDataEngine = scanner.nextLine().split("\\s+");
-
-            String engineModel = inputDataEngine[0];
-            String enginePower = inputDataEngine[1];
-            String engineDisplacement = "n/a";
-            String engineEfficiency = "n/a";
-
-            if (inputDataEngine.length == 3) {
-                if (isNumber(inputDataEngine[2])) {
-                    engineDisplacement = inputDataEngine[2];
-                } else {
-                    engineEfficiency = inputDataEngine[2];
-                }
-            } else if (inputDataEngine.length == 4) {
-                engineDisplacement = inputDataEngine[2];
-                engineEfficiency = inputDataEngine[3];
-            }
-
-            Engine newEngine = new Engine(engineModel, enginePower, engineDisplacement, engineEfficiency);
-            engines.add(newEngine);
-        }
-
-        int carsCount = Integer.parseInt(scanner.nextLine());
+        listEngines(scanner, engines);
 
         List<Car> cars = new ArrayList<>();
+
+        int carsCount = Integer.parseInt(scanner.nextLine());
 
         for (int i = 1; i <= carsCount; i++) {
             String[] inputDataCar = scanner.nextLine().split("\\s+");
@@ -69,6 +46,33 @@ public class CarSalesman {
             System.out.println(car);
         }
 
+    }
+
+    private static void listEngines(Scanner scanner, List<Engine> engines) {
+        int enginesCount = Integer.parseInt(scanner.nextLine());
+
+        for (int i = 1; i <= enginesCount; i++) {
+            String[] inputDataEngine = scanner.nextLine().split("\\s+");
+
+            String engineModel = inputDataEngine[0];
+            String enginePower = inputDataEngine[1];
+            String engineDisplacement = "n/a";
+            String engineEfficiency = "n/a";
+
+            if (inputDataEngine.length == 3) {
+                if (isNumber(inputDataEngine[2])) {
+                    engineDisplacement = inputDataEngine[2];
+                } else {
+                    engineEfficiency = inputDataEngine[2];
+                }
+            } else if (inputDataEngine.length == 4) {
+                engineDisplacement = inputDataEngine[2];
+                engineEfficiency = inputDataEngine[3];
+            }
+
+            Engine newEngine = new Engine(engineModel, enginePower, engineDisplacement, engineEfficiency);
+            engines.add(newEngine);
+        }
     }
 
     public static boolean isNumber(String input) {
