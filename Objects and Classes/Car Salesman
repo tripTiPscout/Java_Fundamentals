@@ -15,10 +15,13 @@ public class CarSalesman {
 
         listCars(scanner, engines, cars);
 
+        printCars(cars);
+    }
+
+    private static void printCars(List<Car> cars) {
         for (Car car : cars) {
             System.out.println(car);
         }
-
     }
 
     private static void listCars(Scanner scanner, List<Engine> engines, List<Car> cars) {
