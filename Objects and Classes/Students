@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Students {
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -12,6 +13,10 @@ public class Students {
 
         listStudents(scanner, students);
 
+        printStudentsFromSpecificTown(scanner, students);
+    }
+
+    private static void printStudentsFromSpecificTown(Scanner scanner, List<Student> students) {
         String townName = scanner.nextLine();
 
         for (Student student : students) {
