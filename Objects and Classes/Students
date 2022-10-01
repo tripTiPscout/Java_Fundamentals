@@ -5,13 +5,24 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Students {
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        String input = scanner.nextLine();
-
         List<Student> students = new ArrayList<>();
+
+        listStudents(scanner, students);
+
+        String townName = scanner.nextLine();
+
+        for (Student student : students) {
+            if (student.getTown().equals(townName)) {
+                System.out.printf("%s %s is %d years old.\n", student.getFirstName(), student.getLastName(), student.getAge());
+            }
+        }
+    }
+
+    private static void listStudents(Scanner scanner, List<Student> students) {
+        String input = scanner.nextLine();
 
         while (!input.equals("end")) {
             String[] studentData = input.trim().split("\\s+");
@@ -34,14 +45,6 @@ public class Students {
 
             input = scanner.nextLine();
         }
-
-        String townName = scanner.nextLine();
-
-        for (Student student : students) {
-            if (student.getTown().equals(townName)) {
-                System.out.printf("%s %s is %d years old.\n", student.getFirstName(), student.getLastName(), student.getAge());
-            }
-        }
     }
 
     private static Student getStudent(List<Student> students, String firstName, String lastName) {
@@ -62,7 +65,7 @@ public class Students {
         }
         return false;
     }
-    
+
     static class Student {
 
         private String firstName;
@@ -76,7 +79,7 @@ public class Students {
             this.age = age;
             this.town = town;
         }
-        
+
         public String getFirstName() {
             return this.firstName;
         }
