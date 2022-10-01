@@ -1,6 +1,9 @@
 package Fundamentals;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class CompanyRoster {
@@ -8,11 +11,9 @@ public class CompanyRoster {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int inputLines = Integer.parseInt(scanner.nextLine());
-
         List<Employee> employees = new ArrayList<>();
 
-        listEmployees(scanner, inputLines, employees);
+        listEmployees(scanner, employees);
 
         List<String> departmentsList = getDepartmentsList(employees);
 
@@ -64,31 +65,33 @@ public class CompanyRoster {
         }
     }
 
-    private static void listEmployees(Scanner scanner, int inputLines, List<Employee> employees) {
-        for (int i = 1; i <= inputLines; i++) {
-            String[] inputData = scanner.nextLine().split(" ");
+    private static void listEmployees(Scanner scanner, List<Employee> employees) {
+        int inputLines = Integer.parseInt(scanner.nextLine());
 
-            String employeeName = inputData[0];
-            double employeeSalary = Double.parseDouble(inputData[1]);
-            String employeePosition = inputData[2];
-            String departmentName = inputData[3];
+        for (int i = 1; i <= inputLines; i++) {
+            String[] inputEmployeeData = scanner.nextLine().split(" ");
+
+            String employeeName = inputEmployeeData[0];
+            double employeeSalary = Double.parseDouble(inputEmployeeData[1]);
+            String employeePosition = inputEmployeeData[2];
+            String departmentName = inputEmployeeData[3];
             String employeeMail;
             int employeeAge;
 
             Employee newEmployee = null;
-            if (inputData.length == 4) {
+            if (inputEmployeeData.length == 4) {
                 newEmployee = new Employee(employeeName, employeeSalary, employeePosition, departmentName);
-            } else if (inputData.length == 5) {
-                if (isAge(inputData[4])) {
-                    employeeAge = Integer.parseInt(inputData[4]);
+            } else if (inputEmployeeData.length == 5) {
+                if (isAge(inputEmployeeData[4])) {
+                    employeeAge = Integer.parseInt(inputEmployeeData[4]);
                     newEmployee = new Employee(employeeName, employeeSalary, employeePosition, departmentName, employeeAge);
                 } else {
-                    employeeMail = inputData[4];
+                    employeeMail = inputEmployeeData[4];
                     newEmployee = new Employee(employeeName, employeeSalary, employeePosition, departmentName, employeeMail);
                 }
-            } else if (inputData.length == 6) {
-                employeeMail = inputData[4];
-                employeeAge = Integer.parseInt(inputData[5]);
+            } else if (inputEmployeeData.length == 6) {
+                employeeMail = inputEmployeeData[4];
+                employeeAge = Integer.parseInt(inputEmployeeData[5]);
                 newEmployee = new Employee(employeeName, employeeSalary, employeePosition, departmentName, employeeMail, employeeAge);
             }
             employees.add(newEmployee);
