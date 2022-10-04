@@ -1,0 +1,44 @@
+package Fundamentals;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class TreasureFinder {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int[] key = Arrays.stream(scanner.nextLine().split("\\s+")).mapToInt(Integer::parseInt).toArray();
+
+        String inputCommand = scanner.nextLine();
+
+        while (!inputCommand.equals("find")) {
+            String textInput = inputCommand.trim();
+            
+            StringBuilder message = new StringBuilder();
+            int index = 0;
+            
+            for (int i = 0; i < textInput.length(); i++) {
+                char currentSymbol = textInput.charAt(i);
+                
+                int currentKeyCode = key[index];
+                index++;
+                
+                if (index == key.length) {
+                    index = 0;
+                }
+                char newSymbol = (char) (currentSymbol - currentKeyCode);
+                message.append(newSymbol);
+            }
+            
+            String finalMessage = message.substring(message.indexOf("&") + 1);
+            String treasure = finalMessage.substring(0, finalMessage.indexOf("&"));
+            String coordinates = message.substring(message.indexOf("<") + 1, message.indexOf(">"));
+            
+            System.out.printf("Found %s at %s\n", treasure, coordinates);
+            
+            inputCommand = scanner.nextLine();
+        }
+    }
+
+}
