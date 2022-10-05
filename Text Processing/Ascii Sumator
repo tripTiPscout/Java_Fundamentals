@@ -2,7 +2,7 @@ package Fundamentals;
 
 import java.util.Scanner;
 
-public class Ascii Sumator {
+public class AsciiSumator {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
