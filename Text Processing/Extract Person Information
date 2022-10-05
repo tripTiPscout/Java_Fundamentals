@@ -1,0 +1,22 @@
+package Fundamentals;
+
+import java.util.*;
+
+public class ExtractPersonInformation {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int inputLines = Integer.parseInt(scanner.nextLine());
+
+        for (int i = 1; i <= inputLines; i++) {
+            String inputData = scanner.nextLine();
+            
+            String name = inputData.substring(inputData.indexOf('@') + 1, inputData.indexOf('|'));
+            String age = inputData.substring(inputData.indexOf('#') + 1, inputData.indexOf('*'));
+            
+            System.out.printf("%s is %s years old.\n", name, age);
+        }
+    }
+
+}
