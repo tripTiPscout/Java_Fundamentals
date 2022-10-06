@@ -1,0 +1,33 @@
+package Fundamentals;
+
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class WinningTicket {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String[] tickets = scanner.nextLine().trim().split(",");
+
+        for (String ticket : tickets) {
+            ticket = ticket.trim();
+            if (ticket.length() != 20) {
+                System.out.println("invalid ticket");
+            } else {
+                String regex = "(?=.{20}).*?(?=(?<ch>[@#$^]))(?<match>\\k<ch>{6,10}).*(?<=.{10})\\k<match>.*";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(ticket);
+                if (matcher.find()) {
+                    String match = matcher.group("match");
+                    System.out.printf("ticket \"%s\" - %d%s%s\n", ticket, match.length(), match.charAt(0), (match.length() == 10) ? " Jackpot!" : "");
+                } else {
+                    System.out.printf("ticket \"%s\" - no match\n", ticket);
+                }
+            }
+        }
+
+    }
+
+}
