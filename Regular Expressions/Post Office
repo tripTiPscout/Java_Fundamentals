@@ -1,0 +1,53 @@
+package Fundamentals;
+
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class PostOffice {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String[] inputParts = scanner.nextLine().split("\\|");
+
+        String firstPart = inputParts[0];
+        String secondPart = inputParts[1];
+        String[] words = inputParts[2].split("\\s+");
+
+        String firstPartRegex = "([#$%*&])(?<letters>[A-Z]+)(\\1)";
+        Pattern patternFirstPart = Pattern.compile(firstPartRegex);
+        Matcher matcherFirstPart = patternFirstPart.matcher(firstPart);
+
+        String secondPartRegex = "(?<code>\\d{2}):(?<length>\\d{2})";
+        Pattern patternSecondPart = Pattern.compile(secondPartRegex);
+        Matcher matcherSecondPart = patternSecondPart.matcher(secondPart);
+
+        String firstLetters = "";
+
+        if (matcherFirstPart.find()) {
+            firstLetters = matcherFirstPart.group("letters");
+        }
+
+        Map<Character, Integer> wordFirstLetterAndLength = new LinkedHashMap<>();
+
+        while (matcherSecondPart.find()) {
+            char currentLetter = (char) Integer.parseInt(matcherSecondPart.group("code"));
+            int length = Integer.parseInt(matcherSecondPart.group("length"));
+            if (firstLetters.contains(currentLetter + "") && (length >= 1 && length <= 20)) {
+                wordFirstLetterAndLength.put(currentLetter, length);
+            }
+        }
+
+        for (int i = 0; i < firstLetters.length(); i++) {
+            char firstLetter = firstLetters.charAt(i);
+            for (String word : words) {
+                if (word.charAt(0) == firstLetter && word.length() == wordFirstLetterAndLength.get(firstLetter) + 1) {
+                    System.out.println(word);
+                }
+            }
+        }
+        
+    }
+
+}
