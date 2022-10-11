@@ -1,8 +1,11 @@
 package Fundamentals;
 
-import java.util.*;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Locale;
+import java.util.List;
+import java.util.ArrayList;
 
 public class RageQuit {
 
@@ -12,6 +15,7 @@ public class RageQuit {
         String input = scanner.nextLine();
 
         String regex = "(?<match>(?<symbols>\\D+)(?<num>\\d+))";
+        
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(input);
 
@@ -20,6 +24,7 @@ public class RageQuit {
         while (matcher.find()) {
             String symbols = matcher.group("symbols").toUpperCase(Locale.ROOT);
             int repeat = Integer.parseInt(matcher.group("num"));
+            
             output.append(symbols.repeat(Math.max(0, repeat)));
         }
 
@@ -27,6 +32,7 @@ public class RageQuit {
 
         for (int i = 0; i < output.length(); i++) {
             char currentSymbol = output.charAt(i);
+            
             if (!uniqueSymbols.contains(currentSymbol)) {
                 uniqueSymbols.add(currentSymbol);
             }
