@@ -1,0 +1,39 @@
+package Fundamentals;
+
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class RageQuit {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+
+        String regex = "(?<match>(?<symbols>\\D+)(?<num>\\d+))";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+
+        StringBuilder output = new StringBuilder();
+
+        while (matcher.find()) {
+            String symbols = matcher.group("symbols").toUpperCase(Locale.ROOT);
+            int repeat = Integer.parseInt(matcher.group("num"));
+            output.append(symbols.repeat(Math.max(0, repeat)));
+        }
+
+        List<Character> uniqueSymbols = new ArrayList<>();
+
+        for (int i = 0; i < output.length(); i++) {
+            char currentSymbol = output.charAt(i);
+            if (!uniqueSymbols.contains(currentSymbol)) {
+                uniqueSymbols.add(currentSymbol);
+            }
+        }
+
+        System.out.printf("Unique symbols used: %d\n", uniqueSymbols.size());
+        System.out.println(output);
+    }
+
+}
