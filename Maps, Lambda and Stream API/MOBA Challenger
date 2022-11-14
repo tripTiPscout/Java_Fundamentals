@@ -1,6 +1,8 @@
 package Fundamentals;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.TreeMap;
 
 public class MobaChallenger {
 
@@ -25,8 +27,8 @@ public class MobaChallenger {
         }
 
         players.entrySet().stream()
-                .sorted(Main::sortPlayers)
-                .forEach(Main::printPlayer);
+                .sorted(MobaChallenger::sortPlayers)
+                .forEach(MobaChallenger::printPlayer);
     }
 
     private static int sortPlayers(Map.Entry<String, Map<String, Integer>> a, Map.Entry<String, Map<String, Integer>> b) {
